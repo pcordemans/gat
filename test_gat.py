@@ -22,3 +22,10 @@ def test_log():
     vcs.commit('first commit', 'piet', 'somethings')
     vcs.commit('2nd commit', 'nico', 'other things')
     assert(vcs.log()=='nico : 2nd commit\npiet : first commit\nsystem : initial commit\n')
+
+def test_find():
+    vcs = Gat()
+    vcs.commit('first commit', 'piet', 'somethings')
+    vcs.commit('2nd commit', 'nico', 'other things')
+    assert(vcs.findCommit('first commit') == True)
+    assert(vcs.findCommit('3rd') == False)

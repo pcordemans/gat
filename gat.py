@@ -24,11 +24,24 @@ class Gat:
         return self.__collectAllCommits(self.__currentBranch().head())
 
     def __collectAllCommits(self, cursor):
-        if(cursor is None): 
+        if cursor is None: 
             return ''
         else:
             return str(cursor) + '\n' + self.__collectAllCommits(cursor.getPrevious())
 
+    def findCommonCommit(self, otherBranchName):
+        pass
+
+    def findCommit(self, message):
+        return self.__findCommit(message, self.__currentBranch().head())
+
+    def __findCommit(self, message, cursor):
+        if cursor is None:
+            return False
+        elif message == cursor.getMessage(): 
+            return True
+        else: 
+            return self.__findCommit(message, cursor.getPrevious())
 
 class _Branch:
     def __init__(self, firstCommit):
@@ -48,6 +61,9 @@ class _Commit:
         self.__committer = committer
         self.__previous = previous
 
+    def getMessage(self):
+        return self.__message
+    
     def getPrevious(self):
         return self.__previous
 
