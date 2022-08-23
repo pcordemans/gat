@@ -20,6 +20,16 @@ class Gat:
         if name in self.__branches:
             self.__current = name
 
+    def log(self):
+        return self.__collectAllCommits(self.__currentBranch().head())
+
+    def __collectAllCommits(self, cursor):
+        if(cursor is None): 
+            return ''
+        else:
+            return str(cursor) + '\n' + self.__collectAllCommits(cursor.getPrevious())
+
+
 class _Branch:
     def __init__(self, firstCommit):
         self.__head = firstCommit
@@ -37,6 +47,9 @@ class _Commit:
         self.__content = content
         self.__committer = committer
         self.__previous = previous
+
+    def getPrevious(self):
+        return self.__previous
 
     def __repr__(self):
         return self.__committer + ' : ' + self.__message

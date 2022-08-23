@@ -16,3 +16,9 @@ def test_branch():
     vcs.createBranch('dev')
     vcs.checkout('dev')
     assert(vcs.status() == 'dev >> piet : first commit')
+
+def test_log():
+    vcs = Gat()
+    vcs.commit('first commit', 'piet', 'somethings')
+    vcs.commit('2nd commit', 'nico', 'other things')
+    assert(vcs.log()=='nico : 2nd commit\npiet : first commit\nsystem : initial commit\n')
