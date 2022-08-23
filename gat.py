@@ -13,6 +13,13 @@ class Gat:
     def __currentBranch(self):
         return self.__branches[self.__current]
 
+    def createBranch(self, name):
+        self.__branches[name] = self.__currentBranch()
+
+    def checkout(self, name):
+        if name in self.__branches:
+            self.__current = name
+
 class _Branch:
     def __init__(self, firstCommit):
         self.__head = firstCommit
