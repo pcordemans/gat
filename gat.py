@@ -19,11 +19,18 @@ class _Branch:
     def __init__(self, commit: _Commit = _Commit('initial commit', 'system')) -> None:
         self.__head = commit
 
-    def addCommit(self, message:str, committer: str, content: str) -> None:
-        self.__head = _Commit(message, committer, content, self.head())
+    @classmethod
+    def fromBranch(cls, branch: '_Branch') -> '_Branch':
+        return _Branch(branch.__head)
 
-    def head(self) -> _Commit:
-        return self.__head
+    def addCommit(self, message:str, committer: str, content: str) -> None:
+        self.__head = _Commit(message, committer, content, self.__head)
+
+    def head(self) -> str:
+        return str(self.__head)
+
+    def currentMessage(self) -> str:
+        return self.__head.getMessage()
 
     def tail(self) -> '_Branch':
         return _Branch(self.__head.getPrevious())
@@ -52,7 +59,7 @@ class Gat:
 
     def createBranch(self, name: str):
         """Creates a new branch with a given name, pointing to the current commit"""
-        self.__branches[name] = _Branch(self.__currentBranch().head())
+        self.__branches[name] = _Branch.fromBranch(self.__currentBranch())
 
     def checkout(self, name: str) -> str:
         """Switches between branches, returns name of current branch"""
@@ -68,30 +75,30 @@ class Gat:
         if cursor.isEmpty(): 
             return ''
         else:
-            return str(cursor.head()) + '\n' + self.__collectAllCommits(cursor.tail())
+            return cursor.head() + '\n' + self.__collectAllCommits(cursor.tail())
 
     def findCommonCommit(self, otherBranchName: str) -> str:
         """Finds the common commit between the current branch and the other branch"""
-        return str(self.__findCommonCommit(self.__branches[otherBranchName].head()))
+        return self.__findCommonCommit(self.__branches[otherBranchName])
 
-    def __findCommonCommit(self, cursor: _Commit):
-        if self.findCommit(cursor.getMessage()):
-            return cursor            
+    def __findCommonCommit(self, cursor: _Branch):
+        if self.findCommit(cursor.currentMessage()):
+            return cursor.head()            
         else:
-           return self.__findCommonCommit(cursor.getPrevious())
+           return self.__findCommonCommit(cursor.tail())
 
 
     def findCommit(self, message: str) -> bool:
         """Returns True if the commit identified by the message can be found in the current branch"""
-        return self.__findCommit(message, self.__currentBranch().head())
+        return self.__findCommit(message, self.__currentBranch())
 
-    def __findCommit(self, message: str, cursor: _Commit) -> bool:
-        if cursor is None:
+    def __findCommit(self, message: str, cursor: _Branch) -> bool:
+        if cursor.isEmpty():
             return False
-        elif message == cursor.getMessage(): 
+        elif message == cursor.currentMessage(): 
             return True
         else: 
-            return self.__findCommit(message, cursor.getPrevious())
+            return self.__findCommit(message, cursor.tail())
 
 
 
