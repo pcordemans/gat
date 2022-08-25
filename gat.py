@@ -28,6 +28,9 @@ class _Branch:
     def tail(self) -> '_Branch':
         return _Branch(self.__head.getPrevious())
 
+    def isEmpty(self) -> bool:
+        return self.__head is None
+
 class Gat:
     """Gat is a version source control system which looks a bit like Git"""
 
@@ -51,20 +54,21 @@ class Gat:
         """Creates a new branch with a given name, pointing to the current commit"""
         self.__branches[name] = _Branch(self.__currentBranch().head())
 
-    def checkout(self, name: str) -> None:
-        """Switches between branches"""
+    def checkout(self, name: str) -> str:
+        """Switches between branches, returns name of current branch"""
         if name in self.__branches:
             self.__current = name
+        return self.__current
 
     def log(self) -> str:
         """Returns a string of all commits in the current branch"""
-        return self.__collectAllCommits(self.__currentBranch().head())
+        return self.__collectAllCommits(self.__currentBranch())
 
-    def __collectAllCommits(self, cursor: _Commit) -> str:
-        if cursor is None: 
+    def __collectAllCommits(self, cursor: _Branch) -> str:
+        if cursor.isEmpty(): 
             return ''
         else:
-            return str(cursor) + '\n' + self.__collectAllCommits(cursor.getPrevious())
+            return str(cursor.head()) + '\n' + self.__collectAllCommits(cursor.tail())
 
     def findCommonCommit(self, otherBranchName: str) -> str:
         """Finds the common commit between the current branch and the other branch"""
