@@ -1,6 +1,3 @@
-from xmlrpc.client import Boolean
-
-
 class _Commit:
     def __init__(self, message, committer, content=None, previous=None):
         self.__message = message
@@ -78,11 +75,11 @@ class Gat:
            return self.__findCommonCommit(cursor.getPrevious())
 
 
-    def findCommit(self, message: str) -> Boolean:
+    def findCommit(self, message: str) -> bool:
         """Returns True if the commit identified by the message can be found in the current branch"""
         return self.__findCommit(message, self.__currentBranch().head())
 
-    def __findCommit(self, message: str, cursor: _Commit) -> Boolean:
+    def __findCommit(self, message: str, cursor: _Commit) -> bool:
         if cursor is None:
             return False
         elif message == cursor.getMessage(): 
