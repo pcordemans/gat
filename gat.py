@@ -1,28 +1,28 @@
 class _Commit:
-    def __init__(self, message, committer, content=None, previous=None):
+    def __init__(self, message: str, committer: str, content:str = None, previous: '_Commit' = None):
         self.__message = message
         self.__content = content
         self.__committer = committer
         self.__previous = previous
 
-    def getMessage(self):
+    def getMessage(self) -> str:
         return self.__message
 
-    def getPrevious(self):
+    def getPrevious(self) -> '_Commit':
         return self.__previous
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return self.__committer + ' : ' + self.__message
 
 
 class _Branch:
-    def __init__(self, firstCommit):
+    def __init__(self, firstCommit: _Commit):
         self.__head = firstCommit
 
-    def addCommit(self, commit):
+    def addCommit(self, commit: _Commit):
         self.__head = commit
 
-    def head(self):
+    def head(self) -> _Commit:
         return self.__head
 
 class Gat:
