@@ -1,5 +1,5 @@
 class _Commit:
-    def __init__(self, message: str, committer: str, content:str = None, previous: '_Commit' = None):
+    def __init__(self, message: str, committer: str, content:str = None, previous: '_Commit' = None) -> None:
         self.__message = message
         self.__content = content
         self.__committer = committer
@@ -16,8 +16,8 @@ class _Commit:
 
 
 class _Branch:
-    def __init__(self, firstCommit: _Commit):
-        self.__head = firstCommit
+    def __init__(self, commit: _Commit = _Commit('initial commit', 'system')) -> None:
+        self.__head = commit
 
     def addCommit(self, commit: _Commit):
         self.__head = commit
@@ -28,9 +28,9 @@ class _Branch:
 class Gat:
     """Gat is a version source control system which looks a bit like Git"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Upon calling the constructor a main branch is created with an initial commit"""
-        self.__branches = {'main' : _Branch(_Commit('initial commit','system'))}
+        self.__branches = {'main' : _Branch()}
         self.__current = 'main'
 
     def status(self) -> str:
