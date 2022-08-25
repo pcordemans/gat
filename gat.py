@@ -19,11 +19,14 @@ class _Branch:
     def __init__(self, commit: _Commit = _Commit('initial commit', 'system')) -> None:
         self.__head = commit
 
-    def addCommit(self, commit: _Commit):
-        self.__head = commit
+    def addCommit(self, message:str, committer: str, content: str) -> None:
+        self.__head = _Commit(message, committer, content, self.head())
 
     def head(self) -> _Commit:
         return self.__head
+
+    def tail(self) -> '_Branch':
+        return _Branch(self.__head.getPrevious())
 
 class Gat:
     """Gat is a version source control system which looks a bit like Git"""
@@ -39,8 +42,7 @@ class Gat:
 
     def commit(self, message: str, committer: str, content: str) -> None:
         """Adds a commit to the current branch"""
-        self.__currentBranch().addCommit(
-            _Commit(message, committer, content, self.__currentBranch().head()))
+        self.__currentBranch().addCommit(message, committer, content)
 
     def __currentBranch(self) -> _Branch:
         return self.__branches[self.__current]
