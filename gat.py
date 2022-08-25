@@ -45,7 +45,7 @@ class Gat:
         if self.findCommit(cursor.getMessage()):
             return cursor            
         else:
-           self.__findCommonCommit(cursor.getPrevious())
+           return self.__findCommonCommit(cursor.getPrevious())
 
 
     def findCommit(self, message):

@@ -73,8 +73,8 @@ def test_findCommonCommitBetweenTwoBranches():
     vcs.commit('2nd commit', 'nico', 'other things')
     assert(vcs.findCommonCommit('main') == 'piet : first commit')
     vcs.checkout('main')
-    #assert(vcs.findCommonCommit('dev') == 'piet : first commit')
+    assert(vcs.findCommonCommit('dev') == 'piet : first commit')
     vcs.commit('3rd', 'sille', 'things')
-    #assert(vcs.findCommonCommit('dev') == 'piet : first commit')
+    assert(vcs.findCommonCommit('dev') == 'piet : first commit')
     
     
